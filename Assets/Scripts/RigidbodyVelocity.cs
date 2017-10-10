@@ -5,19 +5,19 @@ using UnityEngine;
 public class RigidbodyVelocity : MonoBehaviour {
     Vector3 inputVector;//Take input from update and send it to fixed update
     Rigidbody myRigidbody;
-    public Vector3 jump;
-    public float jumpForce = 1000.0f;
+    Vector3 jump;
+    public float jumpForce = 2.0f;
     public bool isGrounded;
     private void Start()
     {
         myRigidbody = GetComponent<Rigidbody>();
-        jump = new Vector3(0.0f, 50.0f, 0.0f);
+        jump = new Vector3(0.0f, 4f, 0.0f);
     }
     void Update () {
      
             if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
             {
-
+            //Make sure the player is grounded before they can jump again
             Jump();
                 isGrounded = false;
             }
@@ -39,10 +39,9 @@ public class RigidbodyVelocity : MonoBehaviour {
     }
      void FixedUpdate()
     {
-        // if (inputVector.magnitude > 0.001f)
-        //{
-        myRigidbody.velocity = inputVector * 20f+Physics.gravity*0.3f;
-        //}
+        if (Physics.Raycast(transform.position, inputVector, 10)) {
+        }
+    myRigidbody.velocity = inputVector * 20f+Physics.gravity*0.3f;
     }
 
     void OnCollisionStay()
@@ -52,8 +51,9 @@ public class RigidbodyVelocity : MonoBehaviour {
     }
     void Jump()
     {
-        myRigidbody.AddForce(Vector3.up * jumpForce);
+       // myRigidbody.AddForce(jump * jumpForce, ForceMode.Impulse);
+        // myRigidbody.AddForce(Vector3.up * jumpForce);
         Debug.Log("Trying to jump");
-        myRigidbody.velocity+=(Vector3.up * jumpForce);
+       // myRigidbody.velocity+=(Vector3.up * jumpForce);
     }
 }
