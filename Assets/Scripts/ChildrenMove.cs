@@ -2,25 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChildrenMove : MonoBehaviour { 
- 
-    int shouldTurn=50;
-    float horizontalInput;
-    float verticalInput;
-    Vector3 inputVector;
-    float childMaxSpeed = 0.8f;
-    float childMinSpeed = 0.3f;
-    public bool canMove = true;
-    public bool carried;
-    Rigidbody childBody;
+public class ChildrenMove : MonoBehaviour {
     public Material[] materials;
-     Renderer rend;
+    Rigidbody childBody;
+    Renderer rend;
+    Vector3 inputVector;
+    int shouldTurn;
+    float horizontalInput, verticalInput;
+    float childMaxSpeed, childMinSpeed;
+    public bool canMove, carried;  
     private void Start()
-    {
-        childBody = this.GetComponent<Rigidbody>();
-        rend = GetComponent<Renderer>();
-        rend.enabled = true;
-        rend.sharedMaterial = materials[1];
+    {        
+        setVariables();        
     }
     void Update()
     {
@@ -82,6 +75,7 @@ public class ChildrenMove : MonoBehaviour {
         {
             if (rend.sharedMaterial != materials[0])
             {
+                this.canMove = false;
                 GameManager.Instance.numCaught++;
                 rend.sharedMaterial = materials[2];
             }
@@ -102,10 +96,24 @@ public class ChildrenMove : MonoBehaviour {
             if (rend.sharedMaterial != materials[0])
             {
                 GameManager.Instance.numCaught--;
+                rend.sharedMaterial = materials[1];
+                canMove = true;
             }
            
         }
     }
+    //Physics.IgnoreLayerCollision(8,9,true);
+    public void setVariables()
+    {
+        childBody = this.GetComponent<Rigidbody>();
+        rend = GetComponent<Renderer>();
+        rend.enabled = true;
+        rend.sharedMaterial = materials[1];
+        shouldTurn = 50;
+        childMaxSpeed = 0.8f;
+        childMinSpeed = 0.3f;
+        canMove = true;
+    }
 
 
-}
+    }
