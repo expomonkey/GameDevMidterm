@@ -12,34 +12,17 @@ public class RigidbodyVelocity : MonoBehaviour {
     private void Start()
     {
         setVariables();
-        
     }
-    void Update () {
-       
+    void Update () {      
             if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
             {
-
-            //Make sure the player is grounded before they can jump again
-            //Jump();
-            jumpForce = jumpForceStart;
-            jumpTimer = jumpTimerStart;
-                isGrounded = false;
-            
-            }
-        if (jumpTimer > 0)
-        {
             isGrounded = false;
-            if (jumpTimer < (jumpTimerStart / 3)){
-                jumpForce /=2;
-            }
-            jumpTimer -= Time.deltaTime;
             Jump();
-        }
-
+           }
+       jumpForce= Mathf.Lerp(jumpForce, 0, Time.deltaTime*3);//Lerps the force value down to zero
 
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
-
         //transform our input values based on this transforms right/forward base directions
         inputVector = transform.right * horizontalInput + transform.forward * verticalInput;
 
@@ -54,26 +37,34 @@ public class RigidbodyVelocity : MonoBehaviour {
     {
         if (Physics.Raycast(transform.position, inputVector, 10)) {
         }
-    myRigidbody.velocity = inputVector * 20f+Physics.gravity*0.75f;
+        
+    myRigidbody.velocity= (inputVector * 20f+Physics.gravity*0.75f+jumpForce*Vector3.up);//Jump force is zero unless the player presses space
     }
 
-    void OnCollisionStay()
+   void OnCollisionEnter(Collision collision)
     {
 
-        isGrounded = true;
+        if (collision.gameObject.tag == "Ground")
+        {
+            isGrounded = true;
+        }
+    }
+    private void OnCollisionLeave()
+    {
+        isGrounded = false;
     }
     void Jump()
     {
-       myRigidbody.AddForce(jump * jumpForce, ForceMode.Impulse);
-       // myRigidbody.AddForce(Vector3.up * jumpForce);
-        Debug.Log("Trying to jump");
-       // myRigidbody.velocity+=(Vector3.up * jumpForce);
+        isGrounded = false;
+        jumpForce = 20f;
     }
-    public void setVariables()
+    public void setVariables()//Sets the variables to thier starting values. This is here purely for asthetic reasons
     {
         myRigidbody = GetComponent<Rigidbody>();
-        jump = new Vector3(0.0f, 2f, 0.0f);
+        jump = new Vector3(0.0f, 1f, 0.0f);
         jumpTimerStart = .05f;
         jumpForceStart = 25f;
+       jumpForce = 0f;
+        isGrounded = true;
     }
 }

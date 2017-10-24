@@ -6,5 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Midterm Playground.unity
+    path: Assets/Scenes/Start.unity
+    guid: bc45a14d2ac4c754782be4f457a0adb2
+  - enabled: 1
+    path: Assets/Scenes/Instructions.unity
+    guid: 07ab31cf59eeb8e488eba058a9b432c1
+  - enabled: 1
+    path: Assets/Scenes/Midterm Playground.unity
     guid: d603c393d1729c44b88e609f0dea61a9
