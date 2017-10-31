@@ -33,10 +33,12 @@ public class MouseLook : MonoBehaviour {
             if (Input.GetMouseButtonDown(0))//If you are clicking
             {
                 
-                    if (!isClicking)//And not already clicking
+                   if (!isClicking)//And not already clicking
                     {
 
-                        if (!carrying)//And are not already carrying someone
+                    if (!carrying)//And are not already carrying someone
+                    {
+                        if (mouseRayHit.transform.gameObject.tag == "Child")
                         {
                             isClicking = true;
                             GameManager.Instance.canPickUp = true;
@@ -44,22 +46,23 @@ public class MouseLook : MonoBehaviour {
                             Rigidbody childRigid = child.GetComponent<Rigidbody>();
                             //Place the child where it needs to be
                             child.transform.parent = this.transform.parent.transform;
-                        childSource = child.GetComponent<AudioSource>();
-                        int randomInt = Random.Range(0, kidSounds.Length);
-                        childSource.clip = kidSounds[randomInt];
-                        childSource.Play();//Play crying sound
-                        child.transform.localPosition = new Vector3(0.53f, -0.06999999f, 0.7f);
+                            childSource = child.GetComponent<AudioSource>();
+                            int randomInt = Random.Range(0, kidSounds.Length);
+                            childSource.clip = kidSounds[randomInt];
+                            childSource.Play();//Play crying sound
+                            child.transform.localPosition = new Vector3(0.53f, -0.06999999f, 0.7f);
                             //Stop the child from moving or hitting things
                             childRigid.isKinematic = true;
                             ChildrenMove ChildMoveScript = child.GetComponent<ChildrenMove>();
-                           // ChildMoveScript.canMove = false;
+                            // ChildMoveScript.canMove = false;
                             if (!ChildMoveScript.carried) { ChildMoveScript.carried = true; }
                             carrying = true;
                             //Set the vector to check if you are holding something
                             holdingVector = this.transform.position - child.transform.position;
                             Input.ResetInputAxes();
-                        
+
                         }
+                    }
                 }
             }
         }
